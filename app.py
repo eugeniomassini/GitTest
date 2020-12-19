@@ -6,6 +6,7 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'kncjdiejdsfmsdasldfjwqop'
 app.config['SQLALCHEMY_DATABASE_URI']='sqlite:///website.db'
 app.config['SQLALCHEMY_COMMIT_TEARDOWN']=True
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False # recommendation from pycharm
 
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
@@ -26,13 +27,13 @@ def homepage():
 
 
 @app.before_first_request
-def setup():
+def setup_db():
     db.drop_all()
     db.create_all()
     role_supplier = Role(name='Supplier')
     role_consumer = Role(name='Consumer')
     role_admin = Role(name='Admin')
-    db.session.add_all([role_supplier,role_consumer,role_admin])
+    db.session.add_all([role_supplier, role_consumer, role_admin])
     db.session.commit()
 
 
@@ -66,21 +67,55 @@ def consumer_reg():
     name=None
     registerForm=ConsumerRegForm()
     if registerForm.validate_on_submit():
+        name=registerForm.name.data
         session['name']=registerForm.name.data
         session['email']=registerForm.email.data
-        user_info = User(name=registerForm.name.data,
-                        username=registerForm.email.data,
-                        password=registerForm.password.data,
-                        role_id=2  #Consumer is 2nd role
-                        )
-        db.session.add(user_info)
+        password_2 = bcrypt.generate_password_hash(registerForm.password.data).encode('utf-8')
+        newuser = User(name=registerForm.name.data,
+                       username=registerForm.email.data,
+                       password=password_2,
+                       role_id=2)
+        db.session.add(newuser)
         db.session.commit()
-
-
-        # name=registerForm.name.data
+        return redirect(url_for('post_layout')) #TODO create post_layout.html
     return render_template('register.html', registerForm=registerForm, name=name)
 
 
+
+
+#session login
+
+def login():
+    login_form = loginForm()
+    if login_form.validate_on_submit():
+        user_info = User.query.filter_by(username=login_form.username.data).first()
+        if user_info and bcrypt.check_password_hash(user_info.password, login_form.password.data):
+            session['user_id'] = user_info.id
+            session['name'] = user_info.name
+            session['email'] = user_info.username
+            session['role_id'] = user_info.role_id
+            return redirect('dashboard') #TODO create dashboard
+
+    return render_template('login.html', login_form=login_form) #TODO create login.html
+
+
+# session logout
+
+def logout():
+    session.clear()
+    return redirect(url_for('post_layout')) #TODO create post_layout.html
+
+
+
+# Error 404 and 500 handlers
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'),404
+
+@app.errorhandler(500)
+def server_error(e):
+    return render_template('500.html'),500
 
 
 if __name__ == '__main__':
