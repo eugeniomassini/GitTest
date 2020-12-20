@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!-- Bootstrap core CSS -->
+  <link href="{{ url_for('static',filename='css/bootstrap.min.css') }}" rel="stylesheet">
+</head>
+<body>
+<!-- Simple Header for the page -->
+<div class="row justify-content-md-center">
+    <h1>Join Edesia!</h1>
+</div>
+
+<div class="container-fluid">
+    <form method="get">
+        <div class="col-md-9 m-auto">
+             <div class="form-group">
+                 <label for="InputName">Company Name</label>
+                 <input type="text" class="form-control">
+            </div>
+
+            <div class="form-group">
+                <label for="InputEmail">Email address</label>
+                <input type="email" class="form-control">
+            </div>
+
+            <div class="form-group">
+                <label for="InputPwd">Password</label>
+                <input type="password" class="form-control">
+            </div>
+
+            <div class="form-group">
+                <label for="InputPIVA">PIVA</label>
+                <input type="text" class="form-control">
+            </div>
+
+            <div class="form-group">
+                <label for="InputAddress">Address</label>
+                <input type="text" class="form-control">
+            </div>
+
+            <div class="form-group">
+                <label for="InputCell">Phone Number</label>
+                <input type="number" class="form-control">
+            </div>
+
+            <div class="form-group">
+                <label for="InputDescr">Description</label>
+                <input type="text" class="form-control">
+            </div>
+
+            <button type="submit" class="btn btn-primary">Sign Up</button>
+
+        </div>
+    </form>
+</div>
+</body>
+</html>

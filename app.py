@@ -10,7 +10,7 @@ def hello_world():
 @app.route('/index')
 @app.route('/homepage')
 def homepage():
-    return render_template('index.html')
+    return render_template('base.html')
 
 @app.route('/signin')
 def login():
@@ -23,6 +23,10 @@ def register():
 @app.route('/testHome')
 def testHomepage():
     return render_template('Homepage.html')
+
+@app.route('/reg-c')
+def signupC():
+    return render_template('signup-consumer.html')
 
 if __name__ == '__main__':
     app.run()
