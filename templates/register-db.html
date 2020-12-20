@@ -1,6 +1,13 @@
-<form>
-<h1>Register to Edesia</h1>
-   <div class="control-group form-group">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register Form in database</title>
+</head>
+<body>
+
+<form method="post" >
+          <div class="control-group form-group">
             <div class="controls">
               {{ registerForm.name.label  }}
                 {{ registerForm.name(class='form-control')  }}
@@ -21,7 +28,7 @@
           </div>
           <div class="control-group form-group">
             <div class="controls">
-              {{ registerForm.email.label }}
+              {{ registerForm.email.label  }}
                 {{ registerForm.email(class='form-control') }}
                 {% for error in registerForm.email.errors %}
                     <div class="alert alert-danger">{{ error }}</div>
@@ -41,4 +48,7 @@
           <!-- For success/fail messages -->
         {{ registerForm.submit(class='btn btn-primary') }}
             {{ registerForm.hidden_tag() }}
-</form>
+        </form>
+
+</body>
+</html>
