@@ -15,8 +15,8 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False  # recommendation from pych
 app.config['MAIL_SERVER'] = 'smtp.mail.com'
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_TLS'] = True
-# app.config['MAIL_USERNAME'] = os.environ['EMAIL_USERNAME']
-# app.config['MAIL_PASSWORD'] = os.environ['EMAIL_PASSWORD']
+app.config['MAIL_USERNAME'] = os.environ['EMAIL_USERNAME']
+app.config['MAIL_PASSWORD'] = os.environ['EMAIL_PASSWORD']
 
 db = SQLAlchemy(app)  # database object
 bcrypt = Bcrypt(app)  # to encrypt the use password
@@ -68,27 +68,6 @@ def setup_db():
     db.session.commit()
 
 
-# TODO eliminar aixo?
-@app.route('/register/consum', methods=['POST', 'GET'])
-def register_consumer():
-    name = None
-    register_form = ConsumerRegForm()
-    if register_form.validate_on_submit():
-        name = register_form.name.data
-        session['name'] = register_form.name.data
-        session['email'] = register_form.email.data
-        password_2 = bcrypt.generate_password_hash(register_form.password.data).encode('utf-8')
-        new_consumer = User(name=register_form.name.data,
-                            username=register_form.email.data,
-                            password_2=register_form.password.data,
-                            role_id=2)
-        db.session.add(new_consumer)
-        db.session.commit()
-        return redirect(url_for('login'))
-    return render_template('signup-consumer.html', registerForm=register_form, name_website='Register Edesia',
-                           name=name)
-
-
 @app.route('/login')
 def login():
     return render_template('signin.html')
@@ -119,7 +98,7 @@ def consumer_reg():
                   username=registerForm.email.data,
                   password=registerForm.password.data)
 
-        return redirect(url_for('post_layout'))  # TODO create post_layout.html
+        return redirect(url_for('login'))  # TODO create post_layout.html or choose where to go
     return render_template('signup-consumer.html', registerForm=registerForm, name=name)
 
 
@@ -148,7 +127,7 @@ def supplier_reg():
                        username=registerForm.email.data,
                        password=registerForm.password.data)
 
-        return redirect(url_for('post_layout'))  # TODO create post_layout.html
+        return redirect(url_for('login'))  # TODO create post_layout.html
     return render_template('signup-supplier.html', registerForm=registerForm, name=name)
 
 
@@ -162,9 +141,18 @@ def login():
             session['name'] = user_info.name
             session['email'] = user_info.username
             session['role_id'] = user_info.role_id
-            return redirect('dashboard')  # TODO create dashboard
+            return redirect('dashboard')  # TODO create dashboard.html
 
     return render_template('signin.html', login_form=login_form)
+
+
+@app.route('/dashboard')
+def dashboard():
+    if session.get('email'):
+        name=session.get('name')
+        return render_template('dashboard.html',name=name)
+    else:
+        return redirect(url_for('login'))
 
 
 # session logout
