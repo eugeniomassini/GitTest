@@ -13,45 +13,72 @@
 </div>
 
 <div class="container-fluid">
-    <form method="get">
+    <form method="post">
         <div class="col-md-9 m-auto">
              <div class="form-group">
-                 <label for="InputName">Company Name</label>
-                 <input type="text" class="form-control">
+              {{ registerForm.name.label }}
+                {{ registerForm.name(class='form-control') }}
+                {% for error in registerForm.name.errors %}
+                    <div class="alert alert-danger">{{ error }}</div>
+                {% endfor  %}
+                <p class="help-block"></p>
             </div>
 
             <div class="form-group">
-                <label for="InputEmail">Email address</label>
-                <input type="email" class="form-control">
+              {{ registerForm.email.label }}
+                {{ registerForm.email(class='form-control') }}
+                {% for error in registerForm.email.errors %}
+                    <div class="alert alert-danger">{{ error }}</div>
+                {% endfor  %}
+                <p class="help-block"></p>
             </div>
 
             <div class="form-group">
-                <label for="InputPwd">Password</label>
-                <input type="password" class="form-control">
+              {{ registerForm.password.label }}
+                {{ registerForm.password(class='form-control') }}
+                {% for error in registerForm.password.errors %}
+                    <div class="alert alert-danger">{{ error }}</div>
+                {% endfor  %}
+                <p class="help-block"></p>
             </div>
 
             <div class="form-group">
-                <label for="InputPIVA">PIVA</label>
-                <input type="text" class="form-control">
+              {{ registerForm.PIVA.label }}
+                {{ registerForm.PIVA(class='form-control') }}
+                {% for error in registerForm.PIVA.errors %}
+                    <div class="alert alert-danger">{{ error }}</div>
+                {% endfor  %}
+                <p class="help-block"></p>
             </div>
 
             <div class="form-group">
-                <label for="InputAddress">Address</label>
-                <input type="text" class="form-control">
+              {{ registerForm.address.label }}
+                {{ registerForm.address(class='form-control') }}
+                {% for error in registerForm.address.errors %}
+                    <div class="alert alert-danger">{{ error }}</div>
+                {% endfor  %}
+                <p class="help-block"></p>
             </div>
 
             <div class="form-group">
-                <label for="InputCell">Phone Number</label>
-                <input type="number" class="form-control">
+              {{ registerForm.phone.label }}
+                {{ registerForm.phone(class='form-control') }}
+                {% for error in registerForm.phone.errors %}
+                    <div class="alert alert-danger">{{ error }}</div>
+                {% endfor  %}
             </div>
 
             <div class="form-group">
-                <label for="InputDescr">Description</label>
-                <input type="text" class="form-control">
+              {{ registerForm.description.label }}
+                {{ registerForm.description(class='form-control') }}
+                {% for error in registerForm.description.errors %}
+                    <div class="alert alert-danger">{{ error }}</div>
+                {% endfor  %}
             </div>
-
-            <button type="submit" class="btn btn-primary">Sign Up</button>
-
+        <div id="success"></div>
+          <!-- For success/fail messages -->
+        {{ registerForm.submit(class='btn btn-primary') }}
+            {{ registerForm.hidden_tag() }}
         </div>
     </form>
 </div>
