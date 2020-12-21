@@ -1,20 +1,40 @@
 from flask import Flask, render_template, session, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
+import os
+from flask_mail import Mail, Message
+
 
 app = Flask(__name__)
+
 app.config['SECRET_KEY'] = 'kncjdiejdsfmsdasldfjwqop'
 app.config['SQLALCHEMY_DATABASE_URI']='sqlite:///website.db'
 app.config['SQLALCHEMY_COMMIT_TEARDOWN']=True
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False # recommendation from pycharm
 
-db = SQLAlchemy(app)
+#Email configuration
+app.config['MAIL_SERVER'] ='smtp.mail.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_TLS'] = True
+app.config['MAIL_USERNAME'] = os.environ['EMAIL_USERNAME']
+app.config['MAIL_PASSWORD'] = os.environ['EMAIL_PASSWORD']
+
+db = SQLAlchemy(app) # database object
 bcrypt = Bcrypt(app)
+mail_object = Mail(app) # mail object
 
 from model import User, Role
 from form import ConsumerRegForm, loginForm
 
 
+# Send mail for confirmation of the registration
+def send_mail(to, subject, template, **kwargs):
+    msg = Message(subject,
+                  recipients=[to],
+                  sender=app.config['MAIL_USERNAME'])
+    print(msg)
+    msg.html = render_template('welcome-mail.html', **kwargs) #TODO modify welcome-mail.html
+    mail_object.send(msg)
 
 @app.route('/')
 def hello_world():
