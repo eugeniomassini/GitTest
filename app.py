@@ -68,11 +68,6 @@ def setup_db():
     db.session.commit()
 
 
-@app.route('/login')
-def login():
-    return render_template('signin.html')
-
-
 # Consumer registration in db
 @app.route('/register/consumer', methods=['POST', 'GET'])
 def consumer_reg():
@@ -84,7 +79,7 @@ def consumer_reg():
         session['email'] = registerForm.email.data
         password_2 = bcrypt.generate_password_hash(registerForm.password.data).encode('utf-8')
         new_user = User(name=registerForm.name.data,
-                        username=registerForm.email.data,
+                        email=registerForm.email.data,
                         password=password_2,
                         role_id=2)
         db.session.add(new_user)
@@ -95,7 +90,7 @@ def consumer_reg():
                   'You have registered successfully',
                   'mail',
                   name=registerForm.name.data,
-                  username=registerForm.email.data,
+                  email=registerForm.email.data,
                   password=registerForm.password.data)
 
         return redirect(url_for('login'))  # TODO create post_layout.html or choose where to go
@@ -112,11 +107,11 @@ def supplier_reg():
         session['name'] = registerForm.name.data
         session['email'] = registerForm.email.data
         password_2 = bcrypt.generate_password_hash(registerForm.password.data).encode('utf-8')
-        new_supplier = User(name=registerForm.name.data,
-                            username=registerForm.email.data,
+        user_info = User(name=registerForm.name.data,
+                            email=registerForm.email.data,
                             password=password_2,
                             role_id=1)
-        db.session.add(new_supplier)
+        db.session.add(user_info)
         db.session.commit()
 
         # send welcome email
@@ -124,7 +119,7 @@ def supplier_reg():
                        'You have registered successfully',
                        'mail',
                        name=registerForm.name.data,
-                       username=registerForm.email.data,
+                       email=registerForm.email.data,
                        password=registerForm.password.data)
 
         return redirect(url_for('login'))  # TODO create post_layout.html
@@ -132,16 +127,17 @@ def supplier_reg():
 
 
 # session login
+@app.route('/login', methods=['POST', 'GET'])
 def login():
     login_form = loginForm()
     if login_form.validate_on_submit():
-        user_info = User.query.filter_by(username=login_form.email.data).first()
+        user_info = User.query.filter_by(email=login_form.email.data).first()
         if user_info and bcrypt.check_password_hash(user_info.password, login_form.password.data):
             session['user_id'] = user_info.id
             session['name'] = user_info.name
             session['email'] = user_info.username
             session['role_id'] = user_info.role_id
-            return redirect('dashboard')  # TODO create dashboard.html
+        return redirect('dashboard')  # TODO create dashboard.html
 
     return render_template('signin.html', login_form=login_form)
 
