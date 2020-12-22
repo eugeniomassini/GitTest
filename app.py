@@ -135,7 +135,7 @@ def login():
         if user_info and bcrypt.check_password_hash(user_info.password, login_form.password.data):
             session['user_id'] = user_info.id
             session['name'] = user_info.name
-            session['email'] = user_info.username
+            session['email'] = user_info.email
             session['role_id'] = user_info.role_id
         return redirect('dashboard')  # TODO create dashboard.html
 
