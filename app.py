@@ -22,7 +22,7 @@ db = SQLAlchemy(app)  # database object
 bcrypt = Bcrypt(app)  # to encrypt the use password
 mail_object = Mail(app)  # mail object
 
-from model import User, Role
+from model import User, Role, Consumer, Supplier, Review, ShoppingCart, Order, OrderLines, Message
 from form import ConsumerRegForm, SupplierRegForm, loginForm
 
 
@@ -81,7 +81,8 @@ def consumer_reg():
         new_user = User(name=registerForm.name.data,
                         email=registerForm.email.data,
                         password=password_2,
-                        role_id=2)
+                        roleid=2)
+        #TODO insert information also in consumer's database
         db.session.add(new_user)
         db.session.commit()
 
@@ -108,9 +109,10 @@ def supplier_reg():
         session['email'] = registerForm.email.data
         password_2 = bcrypt.generate_password_hash(registerForm.password.data).encode('utf-8')
         user_info = User(name=registerForm.name.data,
-                            email=registerForm.email.data,
-                            password=password_2,
-                            role_id=1)
+                         email=registerForm.email.data,
+                         password=password_2,
+                         roleid=1)
+        #TODO insert information in supplier's database
         db.session.add(user_info)
         db.session.commit()
 

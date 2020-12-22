@@ -2,7 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, PasswordField
 from wtforms.validators import DataRequired, Email, Length, ValidationError
 import email_validator
-from model import User, Role
+from model import User, Consumer, Supplier, Review, ShoppingCart, Order, OrderLines, Message
 
 
 class ConsumerRegForm(FlaskForm):
