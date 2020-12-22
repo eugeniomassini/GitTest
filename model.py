@@ -8,10 +8,11 @@ class User (db.Model):
     name = db.Column(db.String(50), nullable=False)
     password = db.Column(db.String(200), nullable=False)
     role_id = db.Column(db.Integer, db.ForeignKey('Role.id'))
+    type = db.Column(db.String(30))
 
     __mapper_args__ = {
-        'polymorphic_identity': 'User',
-        'polymorphic_on': role_id
+        'polymorphic_identity': 'user',
+        'polymorphic_on': type
     }
 
     def __repr__(self):
@@ -33,7 +34,7 @@ class Consumer (db.Model):
     cosumer_phone = db.Column(db.String(12), nullable=False)
 
     __mapper_args__ = {
-        'polymorphic_identity': 'Consumer',
+        'polymorphic_identity': 'consumer',
     }
 
 class Supplier (db.Model):
@@ -45,7 +46,7 @@ class Supplier (db.Model):
     description = db.Column(db.String(500), nullable=True)
 
     __mapper_args__ = {
-        'polymorphic_identity': 'Supplier',
+        'polymorphic_identity': 'supplier',
     }
 
 class Review (db.Model):
