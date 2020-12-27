@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, PasswordField
-from wtforms.validators import DataRequired, Email, Length, ValidationError
+from wtforms import StringField, SubmitField, PasswordField, IntegerField
+from wtforms.validators import DataRequired, Email, Length, ValidationError, EqualTo
 import email_validator
 from model import User, Role
 
@@ -10,8 +10,9 @@ class ConsumerRegForm(FlaskForm):
     familyname = StringField('Family Name', validators=[DataRequired(), Length(min=3, max=25)])
     address = StringField('Address', validators=[DataRequired(), Length(min=3, max=40)])
     email = StringField('Email', validators=[DataRequired(), Email()])
-    phone = StringField('Phone', validators=[DataRequired(), Length(min=7, max=12)]) #TODO find a phone validator. number
-    password = PasswordField('password', validators=[DataRequired(), Length(min=6, max=20)])
+    phone = IntegerField('Phone', validators=[DataRequired()])
+    password = PasswordField('Password', validators=[DataRequired(), Length(min=6, max=20)])
+    confirm = PasswordField('Confirm', validators=[DataRequired(), EqualTo('password', message='Passwords must match')])
     submit = SubmitField('Register')
 
     def validate_email(self, email):
@@ -22,12 +23,12 @@ class ConsumerRegForm(FlaskForm):
 
 class SupplierRegForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired(), Length(min=3, max=25)])
-    PIVA = StringField('PIVA', validators=[DataRequired(), Length(min=3, max=25)]) # TODO PIVA validator. number. code
+    PIVA = StringField('PIVA', validators=[DataRequired(), Length(min=3, max=25)])
     address = StringField('Address', validators=[DataRequired(), Length(min=3, max=40)])
     email = StringField('Email', validators=[DataRequired(), Email()])
-    phone = StringField('Phone', validators=[DataRequired(), Length(min=7, max=12)])  # TODO find a phone validator. number
-    description = StringField('Description', validators=[DataRequired(), Length(max=500)]) # no minimum and max of 500 characters
-    password = PasswordField('password', validators=[DataRequired(), Length(min=6, max=20)])
+    phone = IntegerField('Phone', validators=[DataRequired())])  # TODO find a phone validator. number
+    description = StringField('Description', validators=[DataRequired(), Length(max=5000)]) # no minimum and max of 5000 characters
+    password = PasswordField('Password', validators=[DataRequired(), Length(min=6, max=20)])
     submit = SubmitField('Register')
 
 
