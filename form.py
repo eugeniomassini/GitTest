@@ -26,7 +26,7 @@ class SupplierRegForm(FlaskForm):
     PIVA = StringField('PIVA', validators=[DataRequired(), Length(min=3, max=25)])
     address = StringField('Address', validators=[DataRequired(), Length(min=3, max=40)])
     email = StringField('Email', validators=[DataRequired(), Email()])
-    phone = IntegerField('Phone', validators=[DataRequired())])  # TODO find a phone validator. number
+    phone = IntegerField('Phone', validators=[DataRequired()])  # TODO find a phone validator. number
     description = StringField('Description', validators=[DataRequired(), Length(max=5000)]) # no minimum and max of 5000 characters
     password = PasswordField('Password', validators=[DataRequired(), Length(min=6, max=20)])
     submit = SubmitField('Register')
