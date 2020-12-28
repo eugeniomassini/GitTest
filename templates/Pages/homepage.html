@@ -1,0 +1,60 @@
+{% extends "Components/base.html" %}
+
+{% block body %}
+<div class="container-lg">
+    <div class="row row-cols-lg-2">
+
+        <div class="col-lg m-auto">
+            <div class="container-lg justify-content-center">
+                <h3>Meet Edesia</h3>
+                <p>Your new portal for buying fresh and quality food from local farmers nearby</p>
+                <form method="get" id="research_form">
+                    <div class="input-group input-group-lg">
+                        <input type="text" class="form-control rounded-pill border-2" placeholder="Insert location">
+                        <span class="input-group-text" id="inputGroup-sizing-lg"><a class="btn btn-primary btn-lg" href="results"><i class="fas fa-search-location"></i></a></span>
+                        <p id="demo"></p>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="col-lg">
+            <img src="/static/images/hp_first-removebg.png" class="img-fluid" alt="watercolor vegetables">
+        </div>
+
+        <div class="col-lg">
+            <img src="/static/images/dan-burton-1vv6dMlJhIo-unsplash.jpg" class="img-fluid">
+        </div>
+
+        <div class="col-lg">
+            <div class="container-lg justify-content-center">
+                <h3>Quality</h3>
+                <p>Description</p>
+            </div>
+        </div>
+
+        <div class="col-lg">
+            <div class="container-lg justify-content-center">
+                <h3>Supermarket</h3>
+                <p>Description</p>
+            </div>
+        </div>
+
+        <div class="col-lg">
+                <img src="/static/images/fikri-rasyid-amI09sbNZdE-unsplash.jpg" class="img-fluid">
+        </div>
+
+         <div class="col-lg">
+                <img src="/static/images/pexels-maria-lindsey-multimedia-creator-5846288.jpg" class="img-fluid">
+        </div>
+
+        <div class="col-lg">
+            <div class="container-lg justify-content-center">
+                <h3>Help Locals</h3>
+                <p>Description</p>
+            </div>
+        </div>
+
+    </div>
+</div>
+{%  endblock %}
