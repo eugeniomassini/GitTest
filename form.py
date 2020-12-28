@@ -22,7 +22,7 @@ class ConsumerRegForm(FlaskForm):
 
 class SupplierRegForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired(), Length(min=3, max=25)])
-    PIVA = StringField('PIVA', validators=[DataRequired(), Length(min=3, max=25)]) # TODO PIVA validator. number. code
+    piva = StringField('piva', validators=[DataRequired(), Length(min=3, max=25)]) # TODO PIVA validator. number. code
     address = StringField('Address', validators=[DataRequired(), Length(min=3, max=40)])
     email = StringField('Email', validators=[DataRequired(), Email()])
     phone = StringField('Phone', validators=[DataRequired(), Length(min=7, max=12)])  # TODO find a phone validator. number

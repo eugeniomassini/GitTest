@@ -7,7 +7,7 @@ class User (db.Model):
     email = db.Column(db.String(50), unique=True, nullable=False)
     name = db.Column(db.String(50), nullable=False)
     password = db.Column(db.String(200), nullable=False)
-    role_id = db.Column(db.Integer, db.ForeignKey('role.id'))
+    roleid = db.Column(db.Integer, db.ForeignKey('role.id'))
     type = db.Column(db.String(30))
 
     __mapper_args__ = {
@@ -31,7 +31,7 @@ class Consumer (db.Model):
     consumer_name = db.Column(db.String(50), nullable=False)
     consumer_surname = db.Column(db.String(50), nullable=False)
     consumer_address = db.Column(db.String(50), nullable=False)
-    cosumer_phone = db.Column(db.String(12), nullable=False)
+    consumer_phone = db.Column(db.String(12), nullable=False)
 
     __mapper_args__ = {
         'polymorphic_identity': 'consumer',
