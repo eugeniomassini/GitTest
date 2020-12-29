@@ -27,7 +27,8 @@ class Role (db.Model):
         return "<Role %r>" % self.name
 
 class Consumer (db.Model):
-    id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True) # Auto-incrementing
+    c_id = db.Column(db.Integer, primary_key=True)
+    consumer_email = db.Column(db.String(50), db.ForeignKey('user.email'), unique=True, nullable=False)
     consumer_name = db.Column(db.String(50), nullable=False)
     consumer_surname = db.Column(db.String(50), nullable=False)
     consumer_address = db.Column(db.String(50), nullable=False)
@@ -38,7 +39,8 @@ class Consumer (db.Model):
     }
 
 class Supplier (db.Model):
-    id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True) # Auto-incrementing
+    s_id = db.Column(db.Integer, primary_key=True)
+    supplier_email = db.Column(db.String(50), db.ForeignKey('user.email'), unique=True, nullable=False)
     supplier_name = db.Column(db.String(50), nullable=False)
     supplier_address = db.Column(db.String(50), nullable=False)
     supplier_phone = db.Column(db.String(12), nullable=False)
@@ -51,14 +53,14 @@ class Supplier (db.Model):
 
 class Review (db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    consumer_id = db.Column(db.Integer, db.ForeignKey('consumer.id'))
-    supplier_id = db.Column(db.Integer, db.ForeignKey('supplier.id'))
+    consumer_id = db.Column(db.Integer, db.ForeignKey('consumer.c_id'))
+    supplier_id = db.Column(db.Integer, db.ForeignKey('supplier.s_id'))
     text = db.Column(db.Text, nullable=False)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
 
 class Product (db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    supplier_id = db.Column(db.Integer, db.ForeignKey('supplier.id'))
+    supplier_id = db.Column(db.Integer, db.ForeignKey('supplier.s_id'))
     price = db.Column(db.Float, nullable=False)
     description = db.Column(db.Text, nullable=False)
     certificate = db.Column(db.Boolean)
@@ -67,7 +69,7 @@ class ShoppingCart (db.Model):
     id = db.Column(db.Integer, primary_key=True)
     price = db.Column(db.Integer)
     numberofproducts = db.Column(db.Integer)
-    consumer_id = db.Column(db.Integer, db.ForeignKey('consumer.id'))
+    consumer_id = db.Column(db.Integer, db.ForeignKey('consumer.c_id'))
 
 class Order (db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -75,13 +77,13 @@ class Order (db.Model):
     date = db.Column(db.Date)
     amount = db.Column(db.Float)
     pickup = db.Column(db.Boolean)
-    consumer_id = db.Column(db.Integer, db.ForeignKey('consumer.id'))
+    consumer_id = db.Column(db.Integer, db.ForeignKey('consumer.c_id'))
 
 class OrderLines (db.Model):
     id = db.Column(db.Integer, primary_key=True)
     order_id = db.Column(db.Integer, db.ForeignKey('order.id'))
     product_id = db.Column(db.Integer, db.ForeignKey('product.id'))
-    supplier_id = db.Column(db.Integer, db.ForeignKey('supplier.id'))
+    supplier_id = db.Column(db.Integer, db.ForeignKey('supplier.s_id'))
     quantity = db.Column(db.Integer)
 
 class Message (db.Model):

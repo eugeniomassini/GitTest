@@ -82,11 +82,12 @@ def consumer_reg():
                         email=registerForm.email.data,
                         password=password_2,
                         roleid=2)
-        new_consumer = Consumer(consumer_name=registerForm.name.data,
+        new_consumer = Consumer(consumer_email=registerForm.email.data,
+                                consumer_name=registerForm.name.data,
                                 consumer_surname=registerForm.familyname.data,
                                 consumer_address=registerForm.address.data,
                                 consumer_phone=registerForm.phone.data)
-        #TODO insert information also in consumer's database
+        #TODO insert information also in consumer's table
         db.session.add(new_user)
         db.session.add(new_consumer)
         db.session.commit()
@@ -117,12 +118,13 @@ def supplier_reg():
                          email=registerForm.email.data,
                          password=password_2,
                          roleid=1)
-        new_supplier = Supplier(supplier_name=registerForm.name.data,
+        new_supplier = Supplier(supplier_email=registerForm.email.data,
+                                supplier_name=registerForm.name.data,
                                 supplier_address=registerForm.address.data,
                                 supplier_phone=registerForm.phone.data,
                                 piva=registerForm.piva.data,
                                 description=registerForm.description.data)
-        #TODO insert information in supplier's database
+        #TODO insert information in supplier's table
         db.session.add(user_info)
         db.session.add(new_supplier)
         db.session.commit()
