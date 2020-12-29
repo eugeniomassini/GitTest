@@ -1,4 +1,4 @@
-from flask import Flask, render_template, session, redirect, url_for
+from flask import Flask, render_template, session, redirect, url_for, abort
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 import os
@@ -108,9 +108,9 @@ def supplier_reg():
         session['email'] = registerForm.email.data
         password_2 = bcrypt.generate_password_hash(registerForm.password.data).encode('utf-8')
         user_info = User(name=registerForm.name.data,
-                            email=registerForm.email.data,
-                            password=password_2,
-                            role_id=1)
+                         email=registerForm.email.data,
+                         password=password_2,
+                         role_id=1)
         db.session.add(user_info)
         db.session.commit()
 
@@ -142,11 +142,19 @@ def login():
     return render_template('signin.html', login_form=login_form)
 
 
+@app.route('/profile/<username>')
+def user(username):
+    user = User.query.filter_by(username=username).first()
+    if user is None:
+        abort(404)
+    return render_template('personalpage_consumer.html', user=user)
+
+
 @app.route('/dashboard')
 def dashboard():
     if session.get('email'):
-        name=session.get('name')
-        return render_template('dashboard.html',name=name)
+        name = session.get('name')
+        return render_template('dashboard.html', name=name)
     else:
         return redirect(url_for('login'))
 

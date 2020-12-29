@@ -23,13 +23,18 @@ class ConsumerRegForm(FlaskForm):
 
 class SupplierRegForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired(), Length(min=3, max=25)])
-    PIVA = StringField('PIVA', validators=[DataRequired(), Length(min=3, max=25)])
+    PIVA = StringField('PIVA', validators=[DataRequired(), Length(min=3, max=25)]) # no PIVA validator
     address = StringField('Address', validators=[DataRequired(), Length(min=3, max=40)])
     email = StringField('Email', validators=[DataRequired(), Email()])
     phone = IntegerField('Phone', validators=[DataRequired()])  # TODO find a phone validator. number
-    description = StringField('Description', validators=[DataRequired(), Length(max=5000)]) # no minimum and max of 5000 characters
+    description = StringField('Description', validators=[Length(max=5000)]) # no minimum and max of 5000 characters
     password = PasswordField('Password', validators=[DataRequired(), Length(min=6, max=20)])
     submit = SubmitField('Register')
+
+    def validate_email(self, email):
+        user_check = User.query.filter_by(email=self.email.data).first()
+        if user_check:
+            raise ValidationError('This user has been register before or taken')
 
 
 class loginForm(FlaskForm):
