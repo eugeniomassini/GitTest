@@ -28,7 +28,6 @@ class Role (db.Model):
 
 class Consumer (db.Model):
     id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
-    #consumer_email = db.Column(db.String(50), db.ForeignKey('user.email'), unique=True, nullable=False)
     consumer_name = db.Column(db.String(50), nullable=False)
     consumer_surname = db.Column(db.String(50), nullable=False)
     consumer_address = db.Column(db.String(50), nullable=False)
@@ -40,7 +39,6 @@ class Consumer (db.Model):
 
 class Supplier (db.Model):
     id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
-    #supplier_email = db.Column(db.String(50), db.ForeignKey('user.email'), unique=True, nullable=False)
     supplier_name = db.Column(db.String(50), nullable=False)
     supplier_address = db.Column(db.String(50), nullable=False)
     supplier_phone = db.Column(db.String(12), nullable=False)
