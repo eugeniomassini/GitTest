@@ -1,4 +1,4 @@
-from flask import Flask, render_template, session, redirect, url_for
+from flask import Flask, render_template, session, redirect, url_for, abort
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 import os
@@ -22,6 +22,7 @@ db = SQLAlchemy(app)  # database object
 bcrypt = Bcrypt(app)  # to encrypt the use password
 mail_object = Mail(app)  # mail object
 
+# import classes from model
 from model import User, Role, Consumer, Supplier, Review, ShoppingCart, Order, OrderLines, Message
 from form import ConsumerRegForm, SupplierRegForm, loginForm
 
@@ -64,7 +65,7 @@ def setup_db():
     role_supplier = Role(name='Supplier')
     role_consumer = Role(name='Consumer')
     role_admin = Role(name='Admin')
-    db.session.add_all([role_supplier, role_consumer, role_admin])
+    db.session.add_all([role_supplier, role_consumer, role_admin])  # premade user for
     db.session.commit()
 
 
@@ -87,7 +88,7 @@ def consumer_reg():
                                 consumer_surname=registerForm.familyname.data,
                                 consumer_address=registerForm.address.data,
                                 consumer_phone=registerForm.phone.data)
-        #TODO insert information also in consumer's table
+        # TODO insert information also in consumer's table
         db.session.add(new_user)
         db.session.add(new_consumer)
         db.session.commit()
@@ -124,7 +125,7 @@ def supplier_reg():
                                 supplier_phone=registerForm.phone.data,
                                 piva=registerForm.piva.data,
                                 description=registerForm.description.data)
-        #TODO insert information in supplier's table
+        # TODO insert information in supplier's table
         db.session.add(user_info)
         db.session.add(new_supplier)
         db.session.commit()
@@ -157,11 +158,19 @@ def login():
     return render_template('signin.html', login_form=login_form)
 
 
+@app.route('/user/<username>') # TODO change it to ID
+def consumer(username):
+    user = User.query.filter_by(username=username).first()
+    if user is None:
+        abort(404)
+    return render_template('user.html', user=user)
+
+
 @app.route('/dashboard')
 def dashboard():
     if session.get('email'):
-        name=session.get('name')
-        return render_template('dashboard.html',name=name)
+        name = session.get('name')
+        return render_template('dashboard.html', name=name)
     else:
         return redirect(url_for('login'))
 
