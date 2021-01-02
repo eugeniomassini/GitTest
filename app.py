@@ -158,11 +158,19 @@ def login():
     return render_template('signin.html', login_form=login_form)
 
 
-@app.route('/user/<username>') # TODO change it to ID
-def consumer(username):
-    user = User.query.filter_by(username=username).first()
+@app.route('/user/<id>') # TODO change it to ID
+def user(id, roleid):
+    user = User.query.filter_by(id=id).first()
+    role = User.query.filter_by(roleid=roleid).first()
     if user is None:
-        abort(404)
+        abort(404)  # TODO create non existing user page
+    else:
+        if role is 1:
+            return render_template('profile-supplier.html')
+        if role is 2:
+            return render_template('profile-consumer.html')
+
+
     return render_template('user.html', user=user)
 
 
