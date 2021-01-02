@@ -35,3 +35,7 @@ class loginForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[Length(min=3, max=15), DataRequired()])
     submit = SubmitField('Login')
+
+class researchForm(FlaskForm):
+    city = StringField('City', validators=[DataRequired(), Length(max=40)])
+    submit = SubmitField('Research')

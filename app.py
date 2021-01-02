@@ -23,7 +23,7 @@ bcrypt = Bcrypt(app)  # to encrypt the use password
 mail_object = Mail(app)  # mail object
 
 from model import User, Role, Consumer, Supplier, Review, ShoppingCart, Order, OrderLines, Message
-from form import ConsumerRegForm, SupplierRegForm, loginForm
+from form import ConsumerRegForm, SupplierRegForm, loginForm, researchForm
 
 
 # Send mail for confirmation of the registration
@@ -67,6 +67,58 @@ def setup_db():
     db.session.add_all([role_supplier, role_consumer, role_admin])
     db.session.commit()
 
+# Following lines only to pre-insert some users in the database without filling the form each time
+    password1 = bcrypt.generate_password_hash('12345678').encode('utf-8')
+    user_info = User(name='Fruit & Vegetables',
+                     email='s289100@studenti.polito.it',
+                     password=password1,
+                     roleid=1)
+    db.session.add(user_info)
+    db.session.commit()
+    user_info = User.query.filter_by(email='s289100@studenti.polito.it').first()
+    session['user_id'] = user_info.id
+    new_supplier = Supplier(id=user_info.id,
+                            supplier_name='Fruit & Vegetables',
+                            supplier_address='Torino',
+                            supplier_phone='0123456789',
+                            piva='000000',
+                            description='Local & Fresh Food')
+    db.session.add(new_supplier)
+    db.session.commit()
+    password2 = bcrypt.generate_password_hash('12345678').encode('utf-8')
+    user_info = User(name='Organic Food',
+                     email='s222585@studenti.polito.it',
+                     password=password2,
+                     roleid=1)
+    db.session.add(user_info)
+    db.session.commit()
+    user_info = User.query.filter_by(email='s222585@studenti.polito.it').first()
+    session['user_id'] = user_info.id
+    new_supplier = Supplier(id=user_info.id,
+                            supplier_name='Organic Food',
+                            supplier_address='Milano',
+                            supplier_phone='1234567890',
+                            piva='222222',
+                            description='Local & Fresh Vegetables')
+    db.session.add(new_supplier)
+    db.session.commit()
+    password3 = bcrypt.generate_password_hash('12345678').encode('utf-8')
+    new_user = User(name='Elisa',
+                    email='elisa.vassallo.24@gmail.com',
+                    password=password3,
+                    roleid=2)
+    db.session.add(new_user)
+    db.session.commit()
+    user_info = User.query.filter_by(email='elisa.vassallo.24@gmail.com').first()
+    session['user_id'] = user_info.id
+    new_consumer = Consumer(id=user_info.id,
+                            consumer_name='Elisa',
+                            consumer_surname='Vassallo',
+                            consumer_address='Torino',
+                            consumer_phone='0123456789')
+    db.session.add(new_consumer)
+    db.session.commit()
+# End of lines for pre-filling
 
 # Consumer registration in db
 @app.route('/register/consumer', methods=['POST', 'GET'])
@@ -179,6 +231,25 @@ def logout():
 @app.route('/testHome')
 def testHomepage():
     return render_template('Homepage.html')
+
+
+@app.route('/testresearch', methods=['POST', 'GET'])
+def testResearch():
+    research_form = researchForm()
+    if research_form.validate_on_submit():
+        supplier_info = Supplier.query.filter_by(supplier_address=research_form.city.data).all()
+        data = supplier_info.fetchall()
+        return redirect(url_for('testresults'), supplier_info=data)
+        #if supplier_info:
+            #session['supplier_name'] = supplier_info.supplier_name
+            #session['supplier_address'] = supplier_info.supplier_address
+            #session['description'] = supplier_info.description
+        #return redirect(url_for('testresults'))
+    return render_template('research.html', research_form=research_form)
+
+@app.route('/testresults')
+def testResults():
+    return render_template('res.html')
 
 
 # Error 404 and 500 handler

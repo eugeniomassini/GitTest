@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block body %}
+ <div class="container-fluid">
+    <form method="get">
+        <div class="col-md-9 m-auto">
+            <div class="form-group">
+                 {{ research_form.city.label }}
+                    {{ research_form.city(class='form-control') }}
+                    {% for error in research_form.city.errors %}
+                        <div class="alert alert-danger">{{ error }}</div>
+                    {% endfor  %}
+            </div>
+        <div id="success"></div>
+          <!-- For success/fail messages -->
+        {{ research_form.submit(class='btn btn-primary') }}
+            {{ research_form.hidden_tag() }}
+        </div>
+    </form>
+</div>
+{% endblock %}
