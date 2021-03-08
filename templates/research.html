@@ -2,7 +2,7 @@
 
 {% block body %}
  <div class="container-fluid">
-    <form method="get">
+    <form method="post">
         <div class="col-md-9 m-auto">
             <div class="form-group">
                  {{ research_form.city.label }}
@@ -11,6 +11,8 @@
                         <div class="alert alert-danger">{{ error }}</div>
                     {% endfor  %}
             </div>
+            <button class="w-100 btn btn-lg btn-primary" type="submit">Research</button>
+    <p class="mt-5 mb-3 text-muted">&copy; 2017-2020</p>
         <div id="success"></div>
           <!-- For success/fail messages -->
         {{ research_form.submit(class='btn btn-primary') }}
@@ -19,3 +21,4 @@
     </form>
 </div>
 {% endblock %}
+

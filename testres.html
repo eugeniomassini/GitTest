@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+    {% for row in supplier_info %}
+         {{ supplier_info[0] }}
+        <ul>
+            {% for element in supplier_info[1:] %}
+                <li>{{ element|join(',')}}</li>
+            {% endfor %}
+        </ul>
+    {% endfor %}
+
+{% endblock %}

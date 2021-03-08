@@ -1,4 +1,4 @@
-from flask import Flask, render_template, session, redirect, url_for
+from flask import Flask, render_template, session, redirect, url_for, request, flash
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 import os
@@ -47,7 +47,7 @@ def send_mail_supp(to, subject, template, **kwargs):
 
 
 @app.route('/')
-def hello_world():
+def helloworld():
     return 'Hello World!'
 
 
@@ -117,6 +117,23 @@ def setup_db():
                             consumer_address='Torino',
                             consumer_phone='0123456789')
     db.session.add(new_consumer)
+    db.session.commit()
+    password3 = bcrypt.generate_password_hash('12345678').encode('utf-8')
+    user_info = User(name='Organic Vegetables',
+                     email='s222589@studenti.polito.it',
+                     password=password3,
+                     roleid=1)
+    db.session.add(user_info)
+    db.session.commit()
+    user_info = User.query.filter_by(email='s222589@studenti.polito.it').first()
+    session['user_id'] = user_info.id
+    new_supplier = Supplier(id=user_info.id,
+                            supplier_name='Organic Vegetables',
+                            supplier_address='Torino',
+                            supplier_phone='2345678901',
+                            piva='333333',
+                            description='Local Food')
+    db.session.add(new_supplier)
     db.session.commit()
 # End of lines for pre-filling
 
@@ -237,19 +254,31 @@ def testHomepage():
 def testResearch():
     research_form = researchForm()
     if research_form.validate_on_submit():
-        supplier_info = Supplier.query.filter_by(supplier_address=research_form.city.data).all()
-        data = supplier_info.fetchall()
-        return redirect(url_for('testresults'), supplier_info=data)
-        #if supplier_info:
-            #session['supplier_name'] = supplier_info.supplier_name
-            #session['supplier_address'] = supplier_info.supplier_address
-            #session['description'] = supplier_info.description
-        #return redirect(url_for('testresults'))
+        city = research_form.city.data
+        session['city'] = research_form.city.data
+        #suppliers = Supplier.query.filter_by(supplier_address=city).all()
+        #locals_ids = [supplier.id for supplier in suppliers]
+        #localsuppliers = Supplier.query.filter(Supplier.id.in_(locals_ids)).all()
+        #dropname = db.engine.execute("SELECT * FROM SUPPLIER WHERE SUPPLIER_ADDRESS LIKE 'city' ORDER BY id")
+        #suppliers = dropname.fetchall
+        #cur.execute=(dropname, ('%'+research_form.city.data+'%',))
+        #flash('Showing result for: ' + research_form.city.data, 'success')
+        return redirect(url_for('testResults', city=city))
+    #else:
+        #flash('Search again', 'danger')
     return render_template('research.html', research_form=research_form)
 
-@app.route('/testresults')
+
+
+@app.route('/testres', methods=['GET'])
 def testResults():
-    return render_template('res.html')
+    city = request.args.get('city')
+    suppliers = Supplier.query.filter_by(supplier_address=city).all()
+    locals_ids = [supplier.id for supplier in suppliers]
+    localsuppliers = Supplier.query.filter(Supplier.id.in_(locals_ids)).all()
+    if localsuppliers is None:
+        return redirect(url_for('page_not_found'))
+    return render_template('results.html', localsuppliers=localsuppliers)
 
 
 # Error 404 and 500 handler
